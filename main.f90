@@ -60,6 +60,7 @@ subroutine input
   Tprop = 60d0*fs
   dt = 0.1d0
   nt = aint(Tprop/dt) + 1
+  write(*,*)'nt=',nt
 
   E0_1 = 0d-2
   omega0_1 = 1.55d0*ev
@@ -136,6 +137,7 @@ subroutine time_propagation
   real(8) :: dipole
 
   open(20,file='Et_dipole.out')
+  write(20,"(A,2x,I7)")'#nt=',nt
   
   it = 0
   dipole = 2d0*d_12*real(zrho_dm(1,2))
