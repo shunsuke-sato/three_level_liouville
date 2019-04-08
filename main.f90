@@ -21,9 +21,8 @@ module global_variables
   real(8) :: T2_12, T2_13, T2_23
 
 ! parameters for time-propagation
-  integer :: nt, nt_cycle
+  integer :: nt
   real(8) :: dt, Tprop
-  real(8),allocatable :: tt(:)
   
 
 ! laser paraemter
@@ -51,15 +50,18 @@ subroutine input
   Egap = 54.8d0*ev
   Egap_23 = 0.175d0*ev
 
-  d_12 = 1d-2
+  T2_12 = 1d0/(0.27d0*ev)
+
+  d_12 = sqrt(0.18d0/(4d0*pi*T2_12))
   d_23 = 1d-2
 
-  T2_12 = 1d0/(0.27d0*ev)
+
 
   Tprop = 60d0*fs
   dt = 0.1d0
+  nt = aint(Tprop/dt) + 1
 
-  E0_1 = 1d-2
+  E0_1 = 0d-2
   omega0_1 = 1.55d0*ev
   tpulse_1 = 20d0*fs
 
@@ -81,7 +83,7 @@ subroutine initialize
 
 end subroutine initialize
 !-------------------------------------------------------------------------------
-subroutine init_lalser
+subroutine init_laser
   use global_variables
   implicit none
   integer :: it
@@ -97,13 +99,13 @@ subroutine init_lalser
     tt = dt*it
     xx = tt - 0.5d0*tpulse_1
     if(abs(xx)<0.5d0*tpulse_1)then
-      Et_1(it) = -E0_1/omega_1*cos(pi*xx/tpulse_1)**2*sin(omega_1*xx)
+      Et_1(it) = -E0_1/omega0_1*cos(pi*xx/tpulse_1)**2*sin(omega0_1*xx)
     end if
 
     tt = dt*it+0.5d0*dt
     xx = tt - 0.5d0*tpulse_1
     if(abs(xx)<0.5d0*tpulse_1)then
-      Et_1_dt2(it) = -E0_1/omega_1*cos(pi*xx/tpulse_1)**2*sin(omega_1*xx)
+      Et_1_dt2(it) = -E0_1/omega0_1*cos(pi*xx/tpulse_1)**2*sin(omega0_1*xx)
     end if
 
   end do
@@ -113,19 +115,19 @@ subroutine init_lalser
     tt = dt*it
     xx = tt - 0.5d0*tpulse_1 - tdelay
     if(abs(xx)<0.5d0*tpulse_2)then
-      Et_2(it) = -E0_2/omega_1*cos(pi*xx/tpulse_2)**4*sin(omega_2*xx)
+      Et_2(it) = -E0_2/omega0_2*cos(pi*xx/tpulse_2)**4*sin(omega0_2*xx)
     end if
 
     tt = dt*it+0.5d0*dt
     xx = tt - 0.5d0*tpulse_1 - tdelay
     if(abs(xx)<0.5d0*tpulse_2)then
-      Et_2_dt2(it) = -E0_2/omega_2*cos(pi*xx/tpulse_2)**4*sin(omega_2*xx)
+      Et_2_dt2(it) = -E0_2/omega0_2*cos(pi*xx/tpulse_2)**4*sin(omega0_2*xx)
     end if
 
   end do
 
 
-end subroutine init_lalser
+end subroutine init_laser
 !-------------------------------------------------------------------------------
 subroutine time_propagation
   use global_variables
@@ -185,7 +187,7 @@ subroutine dt_evolve(it)
   H23 = Et_1_dt2(it)*d_23
   H12 = Et_2_dt2(it)*d_12
   Hmat(1,2) = H12; Hmat(2,1) = H12
-  Hmat(2,3) = H23; Hmat(3,2) = H32
+  Hmat(2,3) = H23; Hmat(3,2) = H23
 
 !RK2
   irk = 2
