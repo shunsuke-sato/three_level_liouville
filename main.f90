@@ -46,6 +46,8 @@ end program main
 subroutine input
   use global_variables
   implicit none
+  real(8) :: omega0_1_ev, tpulse_1_fs
+  real(8) :: omega0_2_ev, tpulse_2_fs, tdelay_fs
 
   Egap = 54.8d0*ev
   Egap_23 = 0.175d0*ev
@@ -62,14 +64,21 @@ subroutine input
   nt = aint(Tprop/dt) + 1
   write(*,*)'nt=',nt
 
-  E0_1 = 0d-2
-  omega0_1 = 1.55d0*ev
-  tpulse_1 = 20d0*fs
+  open(20,file='input')
+  read(20,*)E0_1, omega0_1_ev, tpulse_1_fs
+!  E0_1 = 0d-2
+  omega0_1 = omega0_1_ev*ev
+  tpulse_1 = tpulse_1_fs*fs
 
-  E0_2 = 1d-4
-  omega0_2 = 55d0*ev
-  tpulse_2 = 0.5d0*fs
-  tdelay = 0d0*fs
+  read(20,*)E0_2, omega0_2_ev, tpulse_2_fs
+  read(20,*)tdelay_fs
+!  E0_2 = 1d-4
+  omega0_2 = omega0_2_ev*ev
+  tpulse_2 = tpulse_2_fs*fs
+
+  tdelay = tdelay_fs*fs
+
+  close(20)
 
 end subroutine input
 !-------------------------------------------------------------------------------
