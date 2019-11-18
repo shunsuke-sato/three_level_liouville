@@ -98,6 +98,9 @@ subroutine init_laser
   implicit none
   integer :: it
   real(8) :: xx, tt
+  real(8) :: t_offset
+
+  t_offset = 10d0*fs
 
   allocate(Et_1(-1:nt+1),Et_1_dt2(-1:nt+1))
   allocate(Et_2(-1:nt+1),Et_2_dt2(-1:nt+1))
@@ -107,15 +110,19 @@ subroutine init_laser
 ! pump pulse
   do it = 0, nt+1
     tt = dt*it
-    xx = tt - 0.5d0*tpulse_1
+    xx = tt - 0.5d0*tpulse_1 -t_offset
     if(abs(xx)<0.5d0*tpulse_1)then
-      Et_1(it) = -E0_1/omega0_1*cos(pi*xx/tpulse_1)**2*sin(omega0_1*xx)
+      Et_1(it) = E0_1/omega0_1*(&
+        -2d0*pi/tpulse_1*cos(pi*xx/tpulse_1)*sin(pi*xx/tpulse_1)*sin(omega0_1*xx) &
+        +omega_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
     end if
 
     tt = dt*it+0.5d0*dt
-    xx = tt - 0.5d0*tpulse_1
+    xx = tt - 0.5d0*tpulse_1 -t_offset
     if(abs(xx)<0.5d0*tpulse_1)then
-      Et_1_dt2(it) = -E0_1/omega0_1*cos(pi*xx/tpulse_1)**2*sin(omega0_1*xx)
+      Et_1_dt2(it) = E0_1/omega0_1*(&
+        -2d0*pi/tpulse_1*cos(pi*xx/tpulse_1)*sin(pi*xx/tpulse_1)*sin(omega0_1*xx) &
+        +omega_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
     end if
 
   end do
@@ -123,15 +130,19 @@ subroutine init_laser
 ! probe pulse
   do it = 0, nt+1
     tt = dt*it
-    xx = tt - 0.5d0*tpulse_1 - tdelay
+    xx = tt - 0.5d0*tpulse_1 - tdelay -t_offset
     if(abs(xx)<0.5d0*tpulse_2)then
-      Et_2(it) = -E0_2/omega0_2*cos(pi*xx/tpulse_2)**4*sin(omega0_2*xx)
+      Et_2(it) = E0_2/omega0_2*( &
+        -4d0*pi/tpulse_2*cos(pi*xx/tpulse_2)**3*sin(pi*xx/tpulse_2)*sin(omega0_2*xx) &
+        +omega0_2*cos(pi*xx/tpulse_2)**4*cos(omega0_2*xx) )
     end if
 
     tt = dt*it+0.5d0*dt
-    xx = tt - 0.5d0*tpulse_1 - tdelay
+    xx = tt - 0.5d0*tpulse_1 - tdelay -t_offset
     if(abs(xx)<0.5d0*tpulse_2)then
-      Et_2_dt2(it) = -E0_2/omega0_2*cos(pi*xx/tpulse_2)**4*sin(omega0_2*xx)
+      Et_2_dt2(it) = E0_2/omega0_2*( &
+        -4d0*pi/tpulse_2*cos(pi*xx/tpulse_2)**3*sin(pi*xx/tpulse_2)*sin(omega0_2*xx) &
+        +omega0_2*cos(pi*xx/tpulse_2)**4*cos(omega0_2*xx) )
     end if
 
   end do
