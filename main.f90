@@ -59,7 +59,7 @@ subroutine input
 
 
 
-  Tprop = 60d0*fs
+  Tprop = 80d0*fs
   dt = 0.1d0
   nt = aint(Tprop/dt) + 1
   write(*,*)'nt=',nt
