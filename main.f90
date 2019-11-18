@@ -114,7 +114,7 @@ subroutine init_laser
     if(abs(xx)<0.5d0*tpulse_1)then
       Et_1(it) = E0_1/omega0_1*(&
         -2d0*pi/tpulse_1*cos(pi*xx/tpulse_1)*sin(pi*xx/tpulse_1)*sin(omega0_1*xx) &
-        +omega_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
+        +omega0_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
     end if
 
     tt = dt*it+0.5d0*dt
@@ -122,7 +122,7 @@ subroutine init_laser
     if(abs(xx)<0.5d0*tpulse_1)then
       Et_1_dt2(it) = E0_1/omega0_1*(&
         -2d0*pi/tpulse_1*cos(pi*xx/tpulse_1)*sin(pi*xx/tpulse_1)*sin(omega0_1*xx) &
-        +omega_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
+        +omega0_1*cos(pi*xx/tpulse_1)**2*cos(omega0_1*xx) )
     end if
 
   end do
