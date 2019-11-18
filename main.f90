@@ -49,12 +49,12 @@ subroutine input
   real(8) :: omega0_1_ev, tpulse_1_fs
   real(8) :: omega0_2_ev, tpulse_2_fs, tdelay_fs
 
-  Egap = 54.8d0*ev
-  Egap_23 = 0.175d0*ev
+  Egap = 54.3d0*ev
+  Egap_23 = 1.2d0*ev
 
-  T2_12 = 1d0/(0.27d0*ev)
+  T2_12 = 1d0/(0.20d0*ev)
 
-  d_12 = sqrt(0.18d0/(4d0*pi*T2_12))
+  d_12 = sqrt(0.14d0/(4d0*pi*T2_12))
   d_23 = 1d-2
 
 
