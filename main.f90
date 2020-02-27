@@ -49,17 +49,17 @@ subroutine input
   real(8) :: omega0_1_ev, tpulse_1_fs
   real(8) :: omega0_2_ev, tpulse_2_fs, tdelay_fs
 
-  Egap = 54.3d0*ev
-  Egap_23 = 1.2d0*ev
+  Egap = 0.1995489529692254E+001 !54.3d0*ev
+  Egap_23 = 0.2037148443668273E+001-0.1995489529692254E+001 !1.2d0*ev
 
-  T2_12 = 1d0/(0.20d0*ev)
+  T2_12 = 1d0/(0.25d0*ev)
 
-  d_12 = sqrt(0.14d0/(4d0*pi*T2_12))
+  d_12 = 1d0 !sqrt(0.14d0/(4d0*pi*T2_12))
   d_23 = 1d-2
 
 
 
-  Tprop = 80d0*fs
+  Tprop = 160d0*fs
   dt = 0.1d0
   nt = aint(Tprop/dt) + 1
   write(*,*)'nt=',nt
