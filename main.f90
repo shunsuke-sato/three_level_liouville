@@ -55,11 +55,11 @@ subroutine input
   T2_12 = 1d0/(0.25d0*ev)
 
   d_12 = 1d0 !sqrt(0.14d0/(4d0*pi*T2_12))
-  d_23 = 1d-2
+  d_23 = 1d0
 
 
 
-  Tprop = 160d0*fs
+  Tprop = 180d0*fs
   dt = 0.1d0
   nt = aint(Tprop/dt) + 1
   write(*,*)'nt=',nt
@@ -100,7 +100,7 @@ subroutine init_laser
   real(8) :: xx, tt
   real(8) :: t_offset
 
-  t_offset = 10d0*fs
+  t_offset = 20d0*fs
 
   allocate(Et_1(-1:nt+1),Et_1_dt2(-1:nt+1))
   allocate(Et_2(-1:nt+1),Et_2_dt2(-1:nt+1))
@@ -160,13 +160,13 @@ subroutine time_propagation
   write(20,"(A,2x,I7)")'#nt=',nt
   
   it = 0
-  dipole = 2d0*d_12*real(zrho_dm(1,2))
+  dipole = -2d0*d_12*real(zrho_dm(1,2))
   write(20,"(999e26.16e3)")dt*it,Et_1(it),Et_2(it),dipole
 
   do it = 0, nt
 
     call dt_evolve(it)
-    dipole = 2d0*d_12*real(zrho_dm(1,2))
+    dipole = -2d0*d_12*real(zrho_dm(1,2))
     write(20,"(999e26.16e3)")dt*(it+1),Et_1(it+1),Et_2(it+1),dipole
 
 
